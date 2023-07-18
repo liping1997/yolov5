@@ -13,7 +13,7 @@ import time
 
 weights = './best.pt'
 device = torch_utils.select_device(0)
-model = DetectMultiBackend(weights, device=device,  data='./data/coco128.yaml')
+model = DetectMultiBackend(weights, device=device,  data='./data/valorant.yaml')
 names=model.names
 num=0
 
@@ -39,35 +39,34 @@ while True:
 
 
 
-    # for i, det in enumerate(pred):
-    #
-    #     im0 = np.ascontiguousarray(im0)
-    #     annotator = Annotator(im0, line_width=3, example=str(names))
-    #     if len(det):
-    #             # 将边界框从img_size缩放到im0的尺寸
-    #             det[:, :4] = scale_boxes(im.shape[2:], det[:, :4], im0.shape).round()
-    #             column_six=det[:,4]
-    #             max_value,max_index=torch.max(column_six,dim=0)
-    #             row_with_max_value=det[max_index]
-    #             x, y = win32gui.GetCursorPos()
-    #             mouse_xy(int((row_with_max_value[0]+row_with_max_value[2])/2-x),int((row_with_max_value[1]+row_with_max_value[3])/2)-y)
-    #             print(1)
-    #             click_mouse_button()
-    #             click_mouse_button()
-    #             click_mouse_button()
-    #             click_mouse_button()
-    #             click_mouse_button()
-
     for i, det in enumerate(pred):
-        imc=im0.copy()
+
         im0 = np.ascontiguousarray(im0)
         annotator = Annotator(im0, line_width=3, example=str(names))
         if len(det):
                 # 将边界框从img_size缩放到im0的尺寸
                 det[:, :4] = scale_boxes(im.shape[2:], det[:, :4], im0.shape).round()
-                for *xyxy, conf, cls in reversed(det):
-                    c = int(cls)  # integer class
-                    label =  f'{names[c]} {conf:.2f}'
-                    annotator.box_label(xyxy, label, color=colors(c, True))
-        im0 = annotator.result()
-        cv2.imwrite(save_path, im0)
+                column_six=det[:,4]
+                max_value,max_index=torch.max(column_six,dim=0)
+                row_with_max_value=det[max_index]
+                x, y = win32gui.GetCursorPos()
+                mouse_xy(int((row_with_max_value[0]+row_with_max_value[2])/2-x),int((row_with_max_value[1]+row_with_max_value[3])/2)-y)
+
+                # click_mouse_button()
+                # click_mouse_button()
+                # click_mouse_button()
+
+
+    # for i, det in enumerate(pred):
+    #     imc=im0.copy()
+    #     im0 = np.ascontiguousarray(im0)
+    #     annotator = Annotator(im0, line_width=3, example=str(names))
+    #     if len(det):
+    #             # 将边界框从img_size缩放到im0的尺寸
+    #             det[:, :4] = scale_boxes(im.shape[2:], det[:, :4], im0.shape).round()
+    #             for *xyxy, conf, cls in reversed(det):
+    #                 c = int(cls)  # integer class
+    #                 label =  f'{names[c]} {conf:.2f}'
+    #                 annotator.box_label(xyxy, label, color=colors(c, True))
+    #     im0 = annotator.result()
+    #     cv2.imwrite(save_path, im0)
